@@ -1,0 +1,2 @@
+C:\git\DsakSearchV2\DsakSearchv2Client\reactapp\obj\Debug\reactapp.esproj.SuggestedBindingRedirects.cache
+C:\git\DsakSearchV2\DsakSearchv2Client\reactapp\obj\Debug\reactapp.esproj.CoreCompileInputs.cache

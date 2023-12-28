@@ -1,0 +1,163 @@
+:root {
+    --background_color: #104656
+}
+
+body,
+ul {
+    margin: 0;
+    padding: 0;
+    background-color: #EEF4F5;
+}
+
+/* Navbar styles */
+.fixed-navbar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    background-color: var(--background_color); /*#104656*/
+    ;
+    z-index: 1000;
+}
+
+.navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    color: white;
+    padding: 15px;
+}
+
+/* Sidebar styles */
+.sidebar {
+    width: 200px;
+    background-color: var(--background_color); /*#104656*/
+    ;
+    color: white;
+    height: 100vh;
+    /* Full height */
+    position: fixed;
+    /* Fixed Sidebar (remains visible while scrolling) */
+    top: 0;
+    left: 0;
+    padding-top: 60px;
+    /* Space for the navbar */
+    overflow-y: auto;
+    /* Enable vertical scroll if content exceeds height */
+}
+
+.nav-links {
+    list-style: none;
+}
+
+    .nav-links li {
+        display: inline;
+        margin-right: 20px;
+    }
+
+        .nav-links li a {
+            color: white;
+            text-decoration: none;
+        }
+
+/* Centered input field */
+.search {
+    flex-grow: 1;
+    text-align: center;
+}
+
+.hf {
+    margin-top: 20px;
+}
+
+    .hf select {
+        width: auto;
+        /* Adjust width as needed */
+        padding: 8px;
+        border-radius: 5px;
+        border: 1px solid #ccc;
+        margin: 10 auto;
+        display: block;
+    }
+
+
+
+.date {
+    margin-top: 20px;
+}
+
+    .date input {
+        width: auto;
+        /* Adjust width as needed */
+        padding: 8px;
+        border-radius: 5px;
+        border: 1px solid #ccc;
+        margin: 10 auto;
+        display: block;
+    }
+
+.products {
+    margin-top: 20px;
+}
+
+    .products select {
+        width: auto;
+        /* Adjust width as needed */
+        padding: 8px;
+        border-radius: 5px;
+        border: 1px solid #ccc;
+        margin: 10 auto;
+        display: block;
+    }
+
+.search input {
+    width: 70%;
+    /* Adjust width as needed */
+    padding: 8px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    margin: 0 auto;
+    display: block;
+}
+
+
+/* Content area styles */
+.content {
+    margin-left: 220px;
+    /* Account for the width of the sidebar */
+    padding: 20px;
+    padding-top: 80px;
+    /* Space for the fixed navbar */
+    margin: 0 auto;
+    /* Center horizontally */
+    text-align: center;
+    /* Center inline content */
+}
+
+
+.row {
+    margin-left: 200PX;
+    margin-right: auto;
+    margin-bottom: 20px;
+}
+
+    .row:after {
+        content: "";
+        display: table;
+        clear: both;
+    }
+
+.content table {
+    border-collapse: collapse;
+    border-spacing: 0;
+    width: 100%;
+    height: 100%;
+    border: 1px solid #493e3e;
+    margin: 0 auto;
+}
+
+th,
+td {
+    text-align: left;
+    padding: 8px;
+}
