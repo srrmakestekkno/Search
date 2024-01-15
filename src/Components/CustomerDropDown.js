@@ -1,19 +1,31 @@
 import React from "react";
+import '../custom.css';
 
-const CustomerDropDown = props => {
-    const handleSelectedValue = (event) => {
-        var value = event.target.value;
-        props.onChange(value);
+const Company = (props) => ( 
+    <option value={props.manager}>{props.manager}</option>
+);
+
+const Companies = (props) => {
+    return (
+        <div className='hf'>
+            <label>Forvalter</label>
+            <select  onChange={(event) => props.onSelect(event.target.value)}>
+                <option value="">-- Velg foretak --</option>
+                {props.companies.map(company => <Company key={company.id} {...company} />)}
+                
+            </select>
+        </div>
+    );
+};
+
+const CustomerDropDown = (props) => {  
+    const handleSelectedValue = (value) => {
+        props.onChange(value);        
     };
 
     return (
-        <div className='hf'>
-            <label>Velg foretak</label>
-            <select onChange={handleSelectedValue}>
-                <option value="">-- Velg foretak --</option>
-                <option value="Sykehuspartner">Sykehuspartner</option>
-                <option value="Betanien">Betanien</option>
-            </select>
+        <div>
+            <Companies onSelect={handleSelectedValue} companies={props.companies} />
         </div>
     );
 };

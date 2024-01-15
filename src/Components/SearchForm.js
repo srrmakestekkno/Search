@@ -8,8 +8,13 @@ const SearchForm = (props) => {
                 onKeyDown={props.onChange}
                 type="text"
                 placeholder="Søk i saker..."
-                required />
+                required />            
+            <div style={{ float: "right" }}>
+                <label>Eksluder DIPS FRONT</label>
+                <input type="checkbox" checked />
+            </div>
         </form>
+
     );
 };
 export default SearchForm;

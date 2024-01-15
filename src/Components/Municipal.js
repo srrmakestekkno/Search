@@ -3,16 +3,21 @@ import React, { useState } from "react";
 const Municipal = () => {
     const [isChecked, setIsChecked] = useState(false);
 
-    const handleCheckBoxChange = () => {
-        setIsChecked(!isChecked); // Toggle the checkbox state
+    const handleChange = (e) => {
+        setIsChecked(e.target.value); // Toggle the checkbox state
     };
+
+
+    // bruk i kode
+    //isChecked ? "" : "";
+
     return (
         <div style={{ margin: 5 }}>
             <form>
-                <label for="municipal">Inkluder kommune i søket</label>
+                <label>Inkluder kommune i søket</label>
                 <input
                     type="checkbox"
-                    onChange={handleCheckBoxChange}
+                    onChange={handleChange}
                     id="municipal_id"
                     checked={isChecked} />
             </form>
