@@ -9,25 +9,26 @@ const Products = (props) => {
         <div className="products">
             <form>
                 <label>Produkter</label>
-                <select onChange={(event) => props.onSelect(event.target.value)} name="products" id="products_id">
+                <select
+                    value={props.selectedProduct}
+                    onChange={(event) => props.onSelectChange("selectedProduct", event.target.value)}>
                     <option value="">-- Velg produkt --</option>
-                    {props.products.map(product => <Product key={product.id} {...product } />)}
+                    {props.products.map(product => <Product key={product.id} {...product} />)}
                 </select>
             </form>
         </div>
     );
 };
 
-const ProductsDropDown = (props) => {   
-    const handleSelectedValue = (value) => {
-        props.onChange(value);
-    };
-
+const ProductsDropdown = (props) => {   
     return (
         <div>
-            <Products onSelect={handleSelectedValue} products={props.products} />
+            <Products
+                onSelectChange={props.onSelectChange}
+                selectedProduct={props.selectedProduct}
+                products={props.products} />
         </div>
     );
 };
 
-export default ProductsDropDown;
+export default ProductsDropdown;

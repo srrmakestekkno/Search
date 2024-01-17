@@ -5,10 +5,9 @@ const ToDate = (props) => {
         <div className="date">
             <label>Til dato</label>
             <input
-                type='date'
-                id="toDate"
-                name="to_date"
-                onChange={(e) => props.onSelect(e.target.value)} />
+            type="date"
+                value={props.selectedToDate }
+                onChange={(e) => props.onSelectChange("selectedToDate", e.target.value)} />
         </div>
     );
 };

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import '../custom.css';
 
 const Company = (props) => ( 
@@ -6,26 +6,28 @@ const Company = (props) => (
 );
 
 const Companies = (props) => {
+    
     return (
         <div className='hf'>
             <label>Forvalter</label>
-            <select  onChange={(event) => props.onSelect(event.target.value)}>
+            <select
+                value={props.selectedManager}
+                onChange={(event) => props.onSelectChange("selectedManager", event.target.value)}>
                 <option value="">-- Velg foretak --</option>
-                {props.companies.map(company => <Company key={company.id} {...company} />)}
-                
+                {props.managers.map(manager => <Company key={manager.id} {...manager} />)}
             </select>
         </div>
     );
 };
 
-const CustomerDropDown = (props) => {  
+const CustomerDropDown = (props) => { 
     const handleSelectedValue = (value) => {
         props.onChange(value);        
     };
 
     return (
         <div>
-            <Companies onSelect={handleSelectedValue} companies={props.companies} />
+            <Companies onSelectChange={props.onSelectChange} selectedManager={props.selectedManager} onSelect={handleSelectedValue} managers={props.managers} />
         </div>
     );
 };

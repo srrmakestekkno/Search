@@ -1,16 +1,19 @@
 import React, { useState } from "react";
-import CustomerDropDown from "./CustomerDropDown";
+import CustomerDropdown from "./CustomerDropdown";
 import FromDate from "./FromDate.js";
 import ToDate from "./ToDate.js";
-import ProductDropDown from "./ProductDropDown.js";
+import ProductDropdown from "./ProductDropdown.js";
 import Municipal from "./Municipal.js";
-
+import VersionDropdown from "./VersionDropdown";
+ 
 const Status = (props) => {   
     return (
         <div className="products">
             <form>
                 <label>Status</label>
-                <select onChange={(event) => props.onSelect(event.target.value)} name="" id="">
+                <select
+                    value={props.selectedStatus}
+                    onChange={(event) => props.onSelectChange("selectedStatus", event.target.value)}>
                     <option value="">-- Velg status --</option>
                     <option value="active">Aktive</option>
                     <option value="inactive">Avsluttet</option>
@@ -20,45 +23,46 @@ const Status = (props) => {
     )
 };
 
-const SideBar = (props) => {    
-    const handleSelectedCompany = (selectedCompany) => {        
-        props.onSelectedCompany(selectedCompany);           
-    };
+const SideBar = (props) => {  
+    const handleSubmit = (event, button) => {  
+        if (button === "filter") {
+            props.filterTheResult(event);
+        } 
 
-    const handleSelectedProduct = (selectedProduct) => {        
-        props.onSelectedProduct(selectedProduct);        
-    };
-
-    const handleSelectedFromDate = (fromDate) => {
-        props.onSelectedFromDate(fromDate);
-    };
-
-    const handleSelectedToDate = (toDate) => {       
-        props.onSelectedToDate(toDate);
-    };
-
-    const handleSelectedStatus = (value) => {
-        props.onSelectedStatus(value);  
-    };
-
-
-    const [manager, setManager] = useState("");
-
-    const handleSubmit = () => {
-
-    };
+        if (button === "clear") {
+            props.resetParams(event);            
+        }        
+    };    
 
 
     return (
         <aside className="sidebar">
-            <form onSubmit={handleSubmit }>
-            <CustomerDropDown companies={props.data} onChange={handleSelectedCompany} />
-            <FromDate onSelect={handleSelectedFromDate} /> 
-            <ToDate onSelect={handleSelectedToDate} /> 
-            <ProductDropDown products={props.products} onChange={handleSelectedProduct} />
-            <Status onSelect={handleSelectedStatus} />
+            <form>
+                <CustomerDropdown
+                    onSelectChange={props.onSelectChange}
+                    selectedManager={props.selectedManager}
+                    managers={props.data} />
+                <FromDate
+                    onSelectChange={props.onSelectChange}
+                    selectedFromDate={props.selectedFromDate} /> 
+                <ToDate
+                    onSelectChange={props.onSelectChange}
+                    selectedToDate={props.selectedToDate} /> 
+                <ProductDropdown
+                    onSelectChange={props.onSelectChange}
+                    selectedProduct={props.selectedProduct}
+                    products={props.products} />
+                <VersionDropdown
+                    onSelectChange={props.onSelectChange}
+                    selectedVersion={props.selectedVersion}
+                    versions={props.versions}
+                    />
+                <Status
+                    selectedStatus={props.selectedStatus }
+                    onSelectChange={props.onSelectChange} />
                 <Municipal />
-                <button>Filtrer</button>
+                <button onClick={e => handleSubmit(e, "filter")}>Filtrer søket</button>  
+                <button onClick={(e) => props.onReset(e)}>Nullstill</button>
             </form>
         </aside>
     );

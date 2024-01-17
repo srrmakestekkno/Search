@@ -1,139 +1,55 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import SideBar from "./Components/SideBar.js";
 import SearcBar from "./Components/SearchBar.js";
 import MainContent from "./Components/MainContent.js";
 import './custom.css';
-import FromDate from "./Components/FromDate.js";
-
-
-
-const utils = {
-    formatDate: (dateString) => {
-
-    }
-};
+import Spinner from "./Components/Spinner.js";
 
 const App = () => {
+    const [isSpinning, setIsSpinning] = useState(false);
+    const defaultFormData = {
+        "selectedManager": "",
+        "selectedProduct": "",
+        "selectedVersion": "",
+        "selectedFromDate": "",
+        "selectedToDate": "",
+        "selectedStatus": ""
+    };
+    const [formData, setFormData] = useState(defaultFormData);
+
     // Saker
     const [tickets, setTickets] = useState([]);
-    const [originalResult, setOriginalResult] = useState();
+    const [originalResult, setOriginalResult] = useState([]);  
 
-
-    // for å vise <MainContent ette resultat
+    // for å vise <MainContent etter resultat
     const [hasContent, setHasContent] = useState(false);
 
-    // Forvalter
-    const [managers, setManagers] = useState([]); // unike Forvaltere som finnes i søket
+    // Dropdowns
+    const [managers, setManagers] = useState([]); // Unike Forvaltere som finnes i søket.
+    const [products, setProducts] = useState([]); // Unike produkter som finnes i søket.
+    const [versions, setVersions] = useState([]); // Unike versjoner som finnes i søket.
 
-    // Produkter
-    const [originalProductList, setOriginalProductList] = useState([]);
-    const [products, setProducts] = useState([]); // unike produkter som finnes i søket
-
-    const [companiesIsFiltered, setCompaniesIsFiltered] = useState(false);
-
-    const [selectedManager, setSelectedManager] = useState("");
-    const [selectedProduct, setSelectedProduct] = useState("");
-
-    const addTickets = (profileData) => {   
-        setOriginalResult(profileData);
+    const addTickets = (profileData) => {
+        setOriginalResult(profileData.tickets); // endre til opprinnelig objekt som har header
         setTickets(profileData.tickets);
-
         setManagers(profileData.companies);
-
-        setOriginalProductList(profileData.products);
-        setProducts(profileData.products);   
-
+        setProducts(profileData.products);
+        setVersions(profileData.versions)
         setHasContent(!hasContent);
-
-        
-    }; 
-
-    // Todo: Fikse filtrering basert på listen som vises
-    // F.eks. Er det filtrert på sykehuspartner så bør produkt filtrers i denne listen, og produkter som vises i dropdown bør kun være i visningen
-    
-    const filterByManager = (value) => {
-        if (value.trim() === "") {
-            setCompaniesIsFiltered(false);
-            setSelectedManager(value);
-            if (selectedProduct === "") {
-                setTickets(originalResult.tickets);
-                setProducts(originalProductList);
-            } else {
-                // vis listen basert på produktfiltrering
-                let filteredSearchByProduct = [];
-                let tempTickets = originalResult.tickets;
-                // går gjennom alle tickets med valgt produkt
-                for (let i = 0; i < tempTickets.length; i++) {
-                    const tempTicket = tempTickets[i];
-                    if (tempTicket.product === selectedProduct) {
-                        filteredSearchByProduct.push(tempTicket);
-                    }
-                }
-                setTickets(filteredSearchByProduct);
-                setProducts(originalProductList);
-            }
-        } else {
-            setSelectedManager(value);
-            setCompaniesIsFiltered(true);
-            if (selectedProduct !== "") {
-                // vis listen basert på valgt produkt
-                let filteredSearchByProduct = [];
-                let tempTickets = originalResult.tickets;
-                // går gjennom alle tickets med valgt produkt
-                for (let i = 0; i < tempTickets.length; i++) {
-                    const tempTicket = tempTickets[i];
-                    if (tempTicket.product === selectedProduct) {
-                        filteredSearchByProduct.push(tempTicket);
-                    }
-                }
-                setTickets(filteredSearchByProduct);
-            } else {
-                const filteredByManagers = originalResult.tickets.filter(ticket => ticket.manager === value);
-                setTickets(filteredByManagers);
-                let updatedProductList = [];
-
-                for (let i = 0; i < originalProductList.length; i++) {
-                    const product = originalProductList[i];
-                    if (filteredByManagers.find(p => p.product === product.productName)) {
-                        updatedProductList.push(product);
-                    }
-                }
-                setTickets(filteredByManagers);
-                setProducts(updatedProductList);
-            }                       
-        }        
     };
 
-    const filterByProduct = (input) => {
-        if (input.trim() === "") {
-            if (selectedManager !== "") {
-                 // hvis listen basert på nåværende liste med filtrering på forvalter
-                let tempTickets = [];
-                for (let i = 0; i < tempTickets.length; i++) {
-                    const tempTicket = tempTickets[i];
-                    if (tempTicket.product === input) {
-                        tempTickets.push(tempTicket);
-                    }
-                }
-                setTickets(tempTickets);
-            } else {
-                setTickets(originalResult.tickets);
-                setSelectedProduct(input);
-            }
-            
-        } else {
-            setSelectedProduct(input);
-            if (companiesIsFiltered) {
-                // filtrer i søket
-                
-            } else {
-                
-            }
-            const filteredSearch = originalResult.tickets.filter(ticket => ticket.product === selectedProduct);
-            setTickets(filteredSearch);            
-        }
+    const handleSelectChange = (name, selectedValue) => {
+        setFormData((prevData) => ({
+            ...prevData,
+            [name]: selectedValue
+        }));
     };
 
+    const handleReset = (e) => {
+        e.preventDefault();
+        setFormData(defaultFormData);
+        setTickets(originalResult);
+    };
 
     // Flytte til utils
     const formatDate = (value) => {
@@ -146,43 +62,98 @@ const App = () => {
 
         const formattedDate = `${day}.${month}.${year} ${hours}:${minutes}`;
         return formattedDate;
+    }; 
+
+    // utils
+    const formatDateYYYYMMDD = (value) => {
+        const inputDate = new Date(value);
+        const day = inputDate.getDate().toString().padStart(2, '0');
+        const month = (inputDate.getMonth() + 1).toString().padStart(2, '0');
+        const year = inputDate.getFullYear().toString();
+
+        const formattedDate = `${year}/${month}/${day}`;
+        return formattedDate;
     };
-            
-    const filterFromDate = (startDate) => { };
+    
 
-    const filterToDate = (date) => { };
-
-    const handleSort = (selectedValue) => { };
-
-    const handleSelectedStatus = (status) => {
-        if (status.trim() !== "") {
-            const value = status === "active" ? 1 : 2;
-            var res = originalResult.tickets.filter(item => item.status === value);
-            setTickets(res);
-        } else {
-            setTickets(originalResult.tickets);
+    const filterTheResult = (event) => {        
+        event.preventDefault();
+        let fromDate = "";
+        if (formData.selectedFromDate !== "") {
+            const formattedFromDate = new Date(formatDateYYYYMMDD(formData.selectedFromDate));
+            fromDate = formattedFromDate;
         }
+
+        let toDate = "";
+        if (formData.selectedToDate !== "") {
+            const formattedToDate = new Date(formatDateYYYYMMDD(formData.selectedToDate));
+            toDate = formattedToDate;
+        }
+        
+        let status = "";
+        if (formData.selectedStatus !== "") {
+            status = formData.selectedStatus === "active" ? 1 : 2;
+        }
+
+        let filteredSearch = [];
+
+        for (const ticket of originalResult) { 
+            if ((formData.selectedManager === "" || formData.selectedManager === ticket.manager) &&
+                (formData.selectedProduct === "" || formData.selectedProduct === ticket.product) &&
+                (formData.selectedVersion === "" || formData.selectedVersion === ticket.version) &&
+                (formData.selectedFromDate === "" || new Date(fromDate).getTime() <= new Date(formatDateYYYYMMDD(ticket.created_At)).getTime()) &&
+                (formData.selectedToDate === "" || new Date(toDate).getTime() >= new Date(formatDateYYYYMMDD(ticket.created_At)).getTime()) &&
+                (formData.selectedStatus === "" || status === ticket.status)) {
+                filteredSearch.push(ticket);
+            }
+        }
+        setTickets(filteredSearch);
     };
 
+    // sorter etter valgt kriterie
+    // stigende
+    const sortByDateAsc = () => {
+        const test = tickets.sort(function (a, b) {
+            let dateA = new Date(a);
+            let dateB = new Date(b);
+
+            return dateA - dateB;
+        });
+    };
+
+    const sortByDateDesc = () => {
+        const test = tickets.sort(function (a, b) {
+            let dateA = new Date(a);
+            let dateB = new Date(b);
+
+            return dateB - dateA;
+        });
+    };
 
     return (
         <div className='container'>
             <SearcBar addTickets={addTickets} />
             <SideBar
+                selectedManager={formData.selectedManager}
+                selectedProduct={formData.selectedProduct}
+                selectedVersion={formData.selectedVersion}
+                selectedFromDate={formData.selectedFromDate}
+                selectedToDate={formData.selectedToDate}
+                selectedStatus={formData.selectedStatus}
+                onSelectChange={handleSelectChange}
+                onReset={handleReset}
                 products={products}
+                versions={versions}
                 data={managers}
-                onSelectedFromDate={filterFromDate}
-                onSelectedToDate={filterToDate}
-                onSelectedCompany={filterByManager}
-                onSelectedProduct={filterByProduct}
-                onSelectedStatus={handleSelectedStatus}
+                filterTheResult={filterTheResult}
             />
             {
-                hasContent === true && 
-                <MainContent sortBy={handleSort} profiles={tickets} dateFormatter={formatDate} />
-            }               
-            
+                hasContent === true &&
+                    <MainContent profiles={tickets} dateFormatter={formatDate} />
+            }   
         </div>
     );
 };
+
+
 export default App;

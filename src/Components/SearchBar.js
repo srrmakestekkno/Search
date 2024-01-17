@@ -3,6 +3,8 @@ import SearchForm from "./SearchForm.js";
 import '../custom.css';
 import { v4 as uuidv4 } from 'uuid';
 
+
+
 const SearcBar = (props) => {
     const handleFormEvent = async (event) => {
         const searchTerm = event.target.value;
