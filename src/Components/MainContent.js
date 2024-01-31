@@ -32,7 +32,13 @@ const MainContent = (props) => {
                                 return <tr key={item.id}>
                                     <td>{++i}</td>
                                     <td>{item.id}</td>
-                                    <td><a href={`${URL}${item.id}`} target="_blank"><div>{item.title}</div></a></td>
+                                    <td>
+                                        <a href={`${URL}${item.id}`} target="_blank">
+                                            <div>
+                                                {item.title}
+                                            </div>
+                                        </a>
+                                    </td>
                                     <td>{item.product}</td>
                                     <td>{item.manager}</td>
                                     <td>{item.company}</td>
@@ -52,7 +58,7 @@ const MainContent = (props) => {
             <div className="content">
                 <div>
                     {/*Vises melding om feil, ikke funnet, eller antall saker som ble funnet.*/}
-                    <h1>Søker i dsak etter {props.term}</h1>
+                    <h1>Søker i dsak etter <br />{props.term}</h1>
                 </div>
                 <div className='progress'>
                     <div className="indeterminate"></div>
