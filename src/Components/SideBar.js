@@ -1,11 +1,11 @@
-import React, { useState } from "react";
-import CustomerDropdown from "./CustomerDropdown";
-import FromDate from "./FromDate.js";
-import ToDate from "./ToDate.js";
+import React from "react";
+import ManagersDropDown from "./ManagersDropDown.js";
+//import FromDate from "./FromDate.js";
+import SortBy from "./SortBy.js";
 import ProductDropdown from "./ProductDropdown.js";
 import Municipal from "./Municipal.js";
 import VersionDropdown from "./VersionDropdown";
- 
+
 const Status = (props) => {   
     return (
         <div className="products">
@@ -24,30 +24,22 @@ const Status = (props) => {
 };
 
 const SideBar = (props) => {  
-    const handleSubmit = (event, button) => {  
-        if (button === "filter") {
-            props.filterTheResult(event);
-        } 
-
-        if (button === "clear") {
-            props.resetParams(event);            
-        }        
+    const handleSubmit = (event) => {  
+        props.filterTheResult(event);        
     };    
-
 
     return (
         <aside className="sidebar">
-            <form>
-                <CustomerDropdown
+            <SortBy sort={props.sort} />
+            <form>                
+                <ManagersDropDown
                     onSelectChange={props.onSelectChange}
                     selectedManager={props.selectedManager}
                     managers={props.data} />
-                <FromDate
-                    onSelectChange={props.onSelectChange}
-                    selectedFromDate={props.selectedFromDate} /> 
-                <ToDate
-                    onSelectChange={props.onSelectChange}
-                    selectedToDate={props.selectedToDate} /> 
+                {/*<FromDate*/}
+                {/*    onSelectChange={props.onSelectChange}*/}
+                {/*    selectedFromDate={props.selectedFromDate} /> */}
+                
                 <ProductDropdown
                     onSelectChange={props.onSelectChange}
                     selectedProduct={props.selectedProduct}
@@ -61,8 +53,8 @@ const SideBar = (props) => {
                     selectedStatus={props.selectedStatus }
                     onSelectChange={props.onSelectChange} />
                 <Municipal />
-                <button onClick={e => handleSubmit(e, "filter")}>Filtrer søket</button>  
-                <button onClick={(e) => props.onReset(e)}>Nullstill</button>
+                <button onClick={e => handleSubmit(e)}>Filtrer søket</button>  
+                <button onClick={e => props.onReset(e)}>Nullstill</button>
             </form>
         </aside>
     );

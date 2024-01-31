@@ -1,15 +1,15 @@
 import React from "react";
 
-
-const SortBy = (props) => {  
+const SortBy = (props) => {
     return (
-        <select
-            style={{ float: "right", height: "40px" }}>
+        <div className="date2">
+            <label>Sorter søkeresultatet</label>
+            <select onChange={e => props.sort(e)}>
             <option value="">Sorter etter...</option>
-            <option value="desccDate">Dato synkende</option>
-            <option value="ascDate">Dato stigende</option>
-        </select>
+            <option value="desc">Dato synkende</option>
+            <option value="asc">Dato stigende</option>
+            </select>
+        </div>
     );
 };
-
 export default SortBy;

@@ -1,8 +1,8 @@
-import React, { useState } from "react";
+import React from "react";
 import '../custom.css';
 
 const Spinner = () => {
-    return <div class="loader"></div>
+    return <div className="progress"></div>
 };
 
 export default Spinner;

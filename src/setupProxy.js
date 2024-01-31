@@ -1,7 +1,7 @@
 const { createProxyMiddleware } = require('http-proxy-middleware');
 
 const context = [
-    "/stian",
+    "/ticket",
 ];
 
 const url = 'https://localhost:7088';

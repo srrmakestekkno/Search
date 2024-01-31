@@ -1,41 +1,53 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import SideBar from "./Components/SideBar.js";
 import SearcBar from "./Components/SearchBar.js";
 import MainContent from "./Components/MainContent.js";
 import './custom.css';
-import Spinner from "./Components/Spinner.js";
+import utils from "./utils.js";
+
 
 const App = () => {
-    const [isSpinning, setIsSpinning] = useState(false);
     const defaultFormData = {
         "selectedManager": "",
         "selectedProduct": "",
         "selectedVersion": "",
         "selectedFromDate": "",
         "selectedToDate": "",
-        "selectedStatus": ""
+        "selectedStatus": "",
+        "searchTerm": ""
     };
+
+    const [searchTerm, setSearchTermState] = useState("");
     const [formData, setFormData] = useState(defaultFormData);
 
     // Saker
     const [tickets, setTickets] = useState([]);
-    const [originalResult, setOriginalResult] = useState([]);  
+    /*const [originalResult, setOriginalResult] = useState([]);  */
+    const [originalResult, setOriginalResult] = useState({});  
 
-    // for å vise <MainContent etter resultat
-    const [hasContent, setHasContent] = useState(false);
+    const [isSearching, setIsSearching] = useState(false);
 
     // Dropdowns
-    const [managers, setManagers] = useState([]); // Unike Forvaltere som finnes i søket.
+    const [managers, setManagers] = useState([]); // Unike forvaltere som finnes i søket.
     const [products, setProducts] = useState([]); // Unike produkter som finnes i søket.
     const [versions, setVersions] = useState([]); // Unike versjoner som finnes i søket.
 
     const addTickets = (profileData) => {
-        setOriginalResult(profileData.tickets); // endre til opprinnelig objekt som har header
+        setOriginalResult(profileData);
         setTickets(profileData.tickets);
         setManagers(profileData.companies);
         setProducts(profileData.products);
         setVersions(profileData.versions)
-        setHasContent(!hasContent);
+        setIsSearching(false);
+    };
+
+    const clearTickets = () => {
+        setOriginalResult({});
+        setTickets([]);
+        setManagers([]);
+        setProducts([]);
+        setVersions([])
+        setIsSearching(true);
     };
 
     const handleSelectChange = (name, selectedValue) => {
@@ -47,49 +59,18 @@ const App = () => {
 
     const handleReset = (e) => {
         e.preventDefault();
-        setFormData(defaultFormData);
-        setTickets(originalResult);
-    };
-
-    // Flytte til utils
-    const formatDate = (value) => {
-        const inputDate = new Date(value);
-        const day = inputDate.getDate().toString().padStart(2, '0');
-        const month = (inputDate.getMonth() + 1).toString().padStart(2, '0');
-        const year = inputDate.getFullYear().toString();
-        const hours = inputDate.getHours().toString().padStart(2, '0');
-        const minutes = inputDate.getMinutes().toString().padStart(2, '0');
-
-        const formattedDate = `${day}.${month}.${year} ${hours}:${minutes}`;
-        return formattedDate;
-    }; 
-
-    // utils
-    const formatDateYYYYMMDD = (value) => {
-        const inputDate = new Date(value);
-        const day = inputDate.getDate().toString().padStart(2, '0');
-        const month = (inputDate.getMonth() + 1).toString().padStart(2, '0');
-        const year = inputDate.getFullYear().toString();
-
-        const formattedDate = `${year}/${month}/${day}`;
-        return formattedDate;
+        setFormData(defaultFormData);;
+        if (originalResult.tickets !== undefined) {
+            setTickets(originalResult.tickets);
+        }
     };
     
 
     const filterTheResult = (event) => {        
-        event.preventDefault();
-        let fromDate = "";
-        if (formData.selectedFromDate !== "") {
-            const formattedFromDate = new Date(formatDateYYYYMMDD(formData.selectedFromDate));
-            fromDate = formattedFromDate;
+        event.preventDefault();        
+        if (originalResult.tickets === undefined) {
+            return;
         }
-
-        let toDate = "";
-        if (formData.selectedToDate !== "") {
-            const formattedToDate = new Date(formatDateYYYYMMDD(formData.selectedToDate));
-            toDate = formattedToDate;
-        }
-        
         let status = "";
         if (formData.selectedStatus !== "") {
             status = formData.selectedStatus === "active" ? 1 : 2;
@@ -97,12 +78,12 @@ const App = () => {
 
         let filteredSearch = [];
 
-        for (const ticket of originalResult) { 
+        for (const ticket of originalResult.tickets) { 
             if ((formData.selectedManager === "" || formData.selectedManager === ticket.manager) &&
                 (formData.selectedProduct === "" || formData.selectedProduct === ticket.product) &&
                 (formData.selectedVersion === "" || formData.selectedVersion === ticket.version) &&
-                (formData.selectedFromDate === "" || new Date(fromDate).getTime() <= new Date(formatDateYYYYMMDD(ticket.created_At)).getTime()) &&
-                (formData.selectedToDate === "" || new Date(toDate).getTime() >= new Date(formatDateYYYYMMDD(ticket.created_At)).getTime()) &&
+                //(formData.selectedFromDate === "" || new Date(fromDate).getTime() <= new Date(formatDateYYYYMMDD(ticket.created_At)).getTime()) &&
+                //(formData.selectedToDate === "" || new Date(toDate).getTime() >= new Date(formatDateYYYYMMDD(ticket.created_At)).getTime()) &&
                 (formData.selectedStatus === "" || status === ticket.status)) {
                 filteredSearch.push(ticket);
             }
@@ -110,30 +91,34 @@ const App = () => {
         setTickets(filteredSearch);
     };
 
-    // sorter etter valgt kriterie
-    // stigende
-    const sortByDateAsc = () => {
-        const test = tickets.sort(function (a, b) {
-            let dateA = new Date(a);
-            let dateB = new Date(b);
+    const sort = (event) => {
+        event.preventDefault();
+        const direction = event.target.value;
 
-            return dateA - dateB;
-        });
+        if (direction.trim() === "asc") {
+            const sortByAsc = (a, b) => new Date(utils.formatDateYYYYMMDD(a.created_At)) - new Date(utils.formatDateYYYYMMDD(b.created_At));
+            const sortedTickets = [...tickets].sort(sortByAsc);
+            setTickets(sortedTickets);
+        } else if (direction === "desc") {
+            const sortByDesc = (a, b) => new Date(utils.formatDateYYYYMMDD(b.created_At)) - new Date(utils.formatDateYYYYMMDD(a.created_At));
+            const sortedTickets = [...tickets].sort(sortByDesc).map(x => x);
+            setTickets(sortedTickets);
+        } else {
+            setTickets(tickets); // Setter tickets med ev. utvalgskriterier.
+        }    
     };
 
-    const sortByDateDesc = () => {
-        const test = tickets.sort(function (a, b) {
-            let dateA = new Date(a);
-            let dateB = new Date(b);
-
-            return dateB - dateA;
-        });
-    };
-
+    
     return (
         <div className='container'>
-            <SearcBar addTickets={addTickets} />
+            <SearcBar
+                setSearchTermState={setSearchTermState}
+                setIsSearching={setIsSearching}
+                addTickets={addTickets}
+                term={searchTerm}
+                clear={clearTickets} />
             <SideBar
+                sort={sort}    
                 selectedManager={formData.selectedManager}
                 selectedProduct={formData.selectedProduct}
                 selectedVersion={formData.selectedVersion}
@@ -147,10 +132,22 @@ const App = () => {
                 data={managers}
                 filterTheResult={filterTheResult}
             />
-            {
-                hasContent === true &&
-                    <MainContent profiles={tickets} dateFormatter={formatDate} />
-            }   
+            {                
+                //hasContent === true &&
+
+                //<MainContent
+                //    header={originalResult.header}
+                //    profiles={tickets}
+                //    term={formData.searchTerm}
+                //    />
+
+            }  
+            <MainContent
+                header={originalResult.header}
+                profiles={tickets}
+                term={searchTerm}
+                isSearching={isSearching}                
+                    />
         </div>
     );
 };

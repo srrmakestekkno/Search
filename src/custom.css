@@ -32,7 +32,6 @@ ul {
 .sidebar {
     width: 200px;
     background-color: var(--background_color); /*#104656*/
-    ;
     color: white;
     height: 100vh;
     /* Full height */
@@ -67,7 +66,7 @@ ul {
 }
 
 .hf {
-    margin-top: 20px;
+    margin-top: 40px;
 }
 
     .hf select {
@@ -80,7 +79,23 @@ ul {
         display: block;
     }
 
+.sortByDate {
+    margin-top:50px;
+}
+    .sortByDate select {
+        width: auto;
+        /* Adjust width as needed */
+        padding: 8px;
+        border-radius: 5px;
+        border: 1px solid #ccc;
+        margin: 10 auto;
+        display: block;
+    }
 
+
+.date2 {
+    margin-top: 40px;
+}
 
 .date {
     margin-top: 20px;
@@ -164,34 +179,121 @@ td {
 
 
 /* SPINNER */
-.loader {
-    border: 36px solid #f3f3f3;
-    border-radius: 50%;
-    border-top: 16px solid black;
-    border-bottom: 16px solid blue;
-    width: 120px;
-    height: 120px;
-    margin:auto;
-    -webkit-animation: spin 2s linear infinite;
-    animation: spin 2s linear infinite;
+.progress {
+    position: relative;
+    height: 4px;
+    display: block;
+    width: 100%;
+    background-color: #acece6;
+    border-radius: 2px;
+    margin: 0.5rem 0 1rem 0;
+    overflow: hidden;
 }
 
-@-webkit-keyframes spin {
+    .progress .determinate {
+        position: absolute;
+        top: 0;
+        left: 0;
+        bottom: 0;
+        background-color: #26a69a;
+        -webkit-transition: width .3s linear;
+        transition: width .3s linear;
+    }
+
+    .progress .indeterminate {
+        background-color: #26a69a;
+    }
+
+        .progress .indeterminate:before {
+            content: '';
+            position: absolute;
+            background-color: inherit;
+            top: 0;
+            left: 0;
+            bottom: 0;
+            will-change: left, right;
+            -webkit-animation: indeterminate 2.1s cubic-bezier(0.65, 0.815, 0.735, 0.395) infinite;
+            animation: indeterminate 2.1s cubic-bezier(0.65, 0.815, 0.735, 0.395) infinite;
+        }
+
+        .progress .indeterminate:after {
+            content: '';
+            position: absolute;
+            background-color: inherit;
+            top: 0;
+            left: 0;
+            bottom: 0;
+            will-change: left, right;
+            -webkit-animation: indeterminate-short 2.1s cubic-bezier(0.165, 0.84, 0.44, 1) infinite;
+            animation: indeterminate-short 2.1s cubic-bezier(0.165, 0.84, 0.44, 1) infinite;
+            -webkit-animation-delay: 1.15s;
+            animation-delay: 1.15s;
+        }
+
+@-webkit-keyframes indeterminate {
     0% {
-        -webkit-transform: rotate(0deg);
+        left: -35%;
+        right: 100%;
+    }
+
+    60% {
+        left: 100%;
+        right: -90%;
     }
 
     100% {
-        -webkit-transform: rotate(360deg);
+        left: 100%;
+        right: -90%;
     }
 }
 
-@keyframes spin {
+@keyframes indeterminate {
     0% {
-        transform: rotate(0deg);
+        left: -35%;
+        right: 100%;
+    }
+
+    60% {
+        left: 100%;
+        right: -90%;
     }
 
     100% {
-        transform: rotate(360deg);
+        left: 100%;
+        right: -90%;
+    }
+}
+
+@-webkit-keyframes indeterminate-short {
+    0% {
+        left: -200%;
+        right: 100%;
+    }
+
+    60% {
+        left: 107%;
+        right: -8%;
+    }
+
+    100% {
+        left: 107%;
+        right: -8%;
+    }
+}
+
+@keyframes indeterminate-short {
+    0% {
+        left: -200%;
+        right: 100%;
+    }
+
+    60% {
+        left: 107%;
+        right: -8%;
+    }
+
+    100% {
+        left: 107%;
+        right: -8%;
     }
 }

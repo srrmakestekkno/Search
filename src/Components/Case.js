@@ -1,6 +1,6 @@
 import React from "react";
 
-const Dsak = (props) => {
+const Case = (props) => {
     return (
         <tr>
             <td>{props.id}</td>
@@ -11,4 +11,4 @@ const Dsak = (props) => {
     );
 };
 
-export default Dsak;
+export default Case;
