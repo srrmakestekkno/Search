@@ -5,6 +5,11 @@ import { v4 as uuidv4 } from 'uuid';
 
 
 const SearcBar = (props) => {
+    const httpMethod = "POST";
+    const contentType = "application/json;charset=UTF-8";
+    const api = "ticket";
+    const endpoint = "search";
+
     const handleFormEvent = (event) => {
         
         const searchTerm = props.term;    
@@ -23,12 +28,12 @@ const SearcBar = (props) => {
 
             let callId = "" + uuidv4();
             const requestOptions = {
-                method: "POST",
-                headers: { "Content-Type": "application/json;charset=UTF-8", "callId": callId },
+                method: httpMethod,
+                headers: { "Content-Type": contentType, "callId": callId },
                 body: JSON.stringify(searchTerm)
             };
 
-            const res = await fetch(`ticket/search`, requestOptions);
+            const res = await fetch(`${api}/${endpoint}`, requestOptions);
             const data = await res.json();
             props.setIsSearching(false);
             props.addTickets(data);            
