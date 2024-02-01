@@ -1,6 +1,5 @@
 import React from "react";
 import ManagersDropDown from "./ManagersDropDown.js";
-//import FromDate from "./FromDate.js";
 import SortBy from "./SortBy.js";
 import ProductDropdown from "./ProductDropdown.js";
 import Municipal from "./Municipal.js";
@@ -10,8 +9,9 @@ const Status = (props) => {
     return (
         <div className="products">
             <form>
-                <label>Status</label>
+                <label className="dropdownLabel">Status</label>
                 <select
+                    className="dropdown"
                     value={props.selectedStatus}
                     onChange={(event) => props.onSelectChange("selectedStatus", event.target.value)}>
                     <option value="">-- Velg status --</option>
@@ -35,11 +35,7 @@ const SideBar = (props) => {
                 <ManagersDropDown
                     onSelectChange={props.onSelectChange}
                     selectedManager={props.selectedManager}
-                    managers={props.data} />
-                {/*<FromDate*/}
-                {/*    onSelectChange={props.onSelectChange}*/}
-                {/*    selectedFromDate={props.selectedFromDate} /> */}
-                
+                    managers={props.data} />                
                 <ProductDropdown
                     onSelectChange={props.onSelectChange}
                     selectedProduct={props.selectedProduct}

@@ -6,46 +6,46 @@ const Table = (props) => {
     const URL = "https://online2.superoffice.com/Cust25129/CS/scripts/ticket.fcgi?_sf=0&action=doScreenDefinition&idString=viewTicket_80_v2&entryId=";
     let content = props.content;
     return (            
-            <div className='row'>
-                <table>
-                    <thead>
-                        <tr>
-                            <th>Linje</th>
-                            <th>Dsak</th>
-                            <th>Emne</th>
-                            <th>Produkt</th>
-                            <th>Forvalter</th>
-                            <th>Firma</th>
-                            <th>Opprettet</th>
-                            <th>PBI</th>
-                            <th>Eier</th>
-                            <th>Er aktiv</th>
+        <div className='row'>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Linje</th>
+                        <th>Dsak</th>
+                        <th>Emne</th>
+                        <th>Produkt</th>
+                        <th>Forvalter</th>
+                        <th>Firma</th>
+                        <th>Opprettet</th>
+                        <th>PBI</th>
+                        <th>Eier</th>
+                        <th>Er aktiv</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {content.map((item, i) => {
+                        return <tr key={item.id}>
+                            <td>{++i}</td>
+                            <td>{item.id}</td>
+                            <td>
+                                <a href={`${URL}${item.id}`} target="_blank" rel="noreferrer">
+                                    <div>
+                                        {item.title}
+                                    </div>
+                                </a>
+                            </td>
+                            <td>{item.product}</td>
+                            <td>{item.manager}</td>
+                            <td>{item.company}</td>
+                            <td>{utils.formatDate(item.created_At)}</td>
+                            <td>{item.pbi}</td>
+                            <td>{item.owner}</td>
+                            <td>{item.status === 1 ? "Aktiv" : "Avsluttet"}</td>
                         </tr>
-                    </thead>
-                    <tbody>
-                        {content.map((item, i) => {
-                            return <tr key={item.id}>
-                                <td>{++i}</td>
-                                <td>{item.id}</td>
-                                <td>
-                                    <a href={`${URL}${item.id}`} target="_blank" rel="noreferrer">
-                                        <div>
-                                            {item.title}
-                                        </div>
-                                    </a>
-                                </td>
-                                <td>{item.product}</td>
-                                <td>{item.manager}</td>
-                                <td>{item.company}</td>
-                                <td>{utils.formatDate(item.created_At)}</td>
-                                <td>{item.pbi}</td>
-                                <td>{item.owner}</td>
-                                <td>{item.status === 1 ? "Aktiv" : "Avsluttet"}</td>
-                            </tr>
-                        })}
-                    </tbody>
-                </table>
-            </div>   
+                    })}
+                </tbody>
+            </table>
+        </div>   
     );    
 };
 
@@ -64,7 +64,7 @@ const MainContent = (props) => {
     if (profilesLength > 0) {
         return (
             <div className="content">
-                <HeaderInfo message={props.header} />
+                <HeaderInfo message={`${props.header}: ${props.term}`} />
                 <Table content={props.profiles} />
             </div>            
         );

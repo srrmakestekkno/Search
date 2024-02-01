@@ -8,8 +8,9 @@ const Products = (props) => {
     return (
         <div className="products">
             <form>
-                <label>Produkter</label>
+                <label className="dropdownLabel">Produkter</label>
                 <select
+                    className="dropdown"
                     value={props.selectedProduct}
                     onChange={(event) => props.onSelectChange("selectedProduct", event.target.value)}>
                     <option value="">-- Velg produkt --</option>

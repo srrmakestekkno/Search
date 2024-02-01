@@ -9,8 +9,9 @@ const Versions = (props) => {
     
     return (
         <div className='hf'>
-            <label>Versjoner</label>
+            <label className="dropdownLabel">Versjoner</label>
             <select
+                className="dropdown"
                 value={props.selectedVersion}
                 onChange={(event) => props.onSelectChange("selectedVersion", event.target.value)}>
                 <option value="">-- Velg versjon --</option>

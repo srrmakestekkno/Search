@@ -9,8 +9,9 @@ const Managers = (props) => {
     
     return (
         <div className='hf'>
-            <label>Forvalter</label>
+            <label className="dropdownLabel">Forvalter</label>
             <select
+                className="dropdown"
                 value={props.selectedManager}
                 onChange={(event) => props.onSelectChange("selectedManager", event.target.value)}>
                 <option value="">-- Velg foretak --</option>

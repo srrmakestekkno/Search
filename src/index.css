@@ -28,17 +28,18 @@ code {
     }
 
     .customers tr:nth-child(even) {
-        background-color: #f2f2f2;
+        background-color: #CCE1EB;
     }
 
     .customers tr:hover {
-        background-color: #ddd;
+        background-color: #CBD3D6;
     }
 
+    /* Tabell header */
     .customers th {
         padding-top: 12px;
         padding-bottom: 12px;
         text-align: left;
-        background-color: #04AA6D;
+        background-color: #18647C;
         color: white;
     }

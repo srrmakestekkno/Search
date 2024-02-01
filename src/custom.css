@@ -1,5 +1,5 @@
 :root {
-    --background_color: #104656
+    --background_color: #104462
 }
 
 body,
@@ -69,28 +69,9 @@ ul {
     margin-top: 40px;
 }
 
-    .hf select {
-        width: auto;
-        /* Adjust width as needed */
-        padding: 8px;
-        border-radius: 5px;
-        border: 1px solid #ccc;
-        margin: 10 auto;
-        display: block;
-    }
-
 .sortByDate {
     margin-top:50px;
 }
-    .sortByDate select {
-        width: auto;
-        /* Adjust width as needed */
-        padding: 8px;
-        border-radius: 5px;
-        border: 1px solid #ccc;
-        margin: 10 auto;
-        display: block;
-    }
 
 
 .date2 {
@@ -115,15 +96,20 @@ ul {
     margin-top: 20px;
 }
 
-    .products select {
-        width: auto;
-        /* Adjust width as needed */
-        padding: 8px;
-        border-radius: 5px;
-        border: 1px solid #ccc;
-        margin: 10 auto;
-        display: block;
-    }
+.dropdown {
+    width: 150px;
+    /* Adjust width as needed */
+    padding: 8px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    margin-left:10px;
+    margin: 10 auto;
+    display: block;
+}
+
+.dropdownLabel {
+    margin-left:10px;
+}
 
 .search input {
     width: 70%;
@@ -181,13 +167,14 @@ td {
 /* Progressbar */
 .progress {
     position: relative;
-    height: 10px; /* Tykkelse på progressbar */
+    height: 8px; /* Tykkelse på progressbar */
     display: block;
     width: 100%;
     background-color: #acece6; /* Farge på progressbar */
     border-radius: 2px;
     /*margin: 0.5rem 0 1rem 0;*/
     margin-left: 220px;
+    margin: 0auto;
     overflow: hidden;
 }
 
