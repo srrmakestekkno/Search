@@ -2,7 +2,7 @@ import React from "react";
 import utils from "../utils.js";
 import Spinner from "./Spinner.js";
 
-const Table = (props) => {
+const TableData = (props) => {
     const URL = "https://online2.superoffice.com/Cust25129/CS/scripts/ticket.fcgi?_sf=0&action=doScreenDefinition&idString=viewTicket_80_v2&entryId=";
     let content = props.content;
     return (            
@@ -61,11 +61,12 @@ const HeaderInfo = (props) => {
 const MainContent = (props) => {
     const isSearching = props.isSearching;
     const profilesLength = props.profiles.length;
+    
     if (profilesLength > 0) {
         return (
             <div className="content">
-                <HeaderInfo message={`${props.header}: ${props.term}`} />
-                <Table content={props.profiles} />
+                <HeaderInfo message={`${props.header}`} />
+                <TableData content={props.profiles} />
             </div>            
         );
     }

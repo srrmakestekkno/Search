@@ -6,12 +6,12 @@ const Manager = (props) => (
 );
 
 const Managers = (props) => {
-    
     return (
         <div className='hf'>
             <label className="dropdownLabel">Forvalter</label>
             <select
                 className="dropdown"
+                onClick={e => props.managerClick(e)}
                 value={props.selectedManager}
                 onChange={(event) => props.onSelectChange("selectedManager", event.target.value)}>
                 <option value="">-- Velg foretak --</option>
@@ -25,6 +25,7 @@ const ManagersDropDown = (props) => {
     return (
         <div>
             <Managers
+                managerClick={props.managerClick}
                 onSelectChange={props.onSelectChange}
                 selectedManager={props.selectedManager}
                 managers={props.managers} />
@@ -32,3 +33,5 @@ const ManagersDropDown = (props) => {
     );
 };
 export default ManagersDropDown;
+
+                

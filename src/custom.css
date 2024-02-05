@@ -96,6 +96,10 @@ ul {
     margin-top: 20px;
 }
 
+.company {
+    margin-top: 20px;
+}
+
 .dropdown {
     width: 150px;
     /* Adjust width as needed */
@@ -118,7 +122,20 @@ ul {
     border-radius: 5px;
     border: 1px solid #ccc;
     margin: 0 auto;
+    display: inline-block;
+}
+
+.resetButton {
+    margin-top: 20px;
+    width: 150px;
+    /* Adjust width as needed */
+    padding: 8px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    margin-left: 10px;
+    margin: 10 auto;
     display: block;
+    background-color: #EDD08F;
 }
 
 

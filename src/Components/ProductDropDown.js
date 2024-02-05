@@ -10,6 +10,7 @@ const Products = (props) => {
             <form>
                 <label className="dropdownLabel">Produkter</label>
                 <select
+                    onClick={e => props.productClick(e)}
                     className="dropdown"
                     value={props.selectedProduct}
                     onChange={(event) => props.onSelectChange("selectedProduct", event.target.value)}>
@@ -25,6 +26,7 @@ const ProductsDropdown = (props) => {
     return (
         <div>
             <Products
+                productClick={props.productClick}
                 onSelectChange={props.onSelectChange}
                 selectedProduct={props.selectedProduct}
                 products={props.products} />

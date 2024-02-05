@@ -15,35 +15,36 @@ const SearcBar = (props) => {
         const searchTerm = props.term;    
         if (searchTerm.trim() !== "") {
             props.clear();
-            search(searchTerm, event);
             props.setIsSearching(true);
+            search(searchTerm, event);
         }        
     };
 
     const search = async (searchTerm, event) => {
         try {
             event.preventDefault();
-
-            // Sett søker i saker info og loader
-
             let callId = "" + uuidv4();
             const requestOptions = {
                 method: httpMethod,
-                headers: { "Content-Type": contentType, "callId": callId },
+                headers: { "Content-Type": contentType, "callId": callId, "includeFront": props.isFrontChecked },
                 body: JSON.stringify(searchTerm)
             };
 
-            const res = await fetch(`${api}/${endpoint}`, requestOptions);
-            const data = await res.json();
+            const res = await fetch(`${api}/${endpoint}`, requestOptions);           
+            
+            const data = await res.json();  
             props.setIsSearching(false);
             props.addTickets(data);            
         } catch (error) {
-            // Vis feilmelding...
-            console.error('Error fetching data:', error);
-            //setLoading(false);
+            console.error(`Error fetching data: ${error.message}`);
+            props.setIsSearching(false);
+            
         }
     };
-    
+
+    const checkHandler = () => {
+        props.checkHandler(!props.isFrontChecked);
+    };
 
     return (
         <div>
@@ -53,7 +54,11 @@ const SearcBar = (props) => {
                     <div className="logo">DIPS</div>
                     <div className="search">
                             <SearchForm onChange={handleFormEvent} setSearchTermState={props.setSearchTermState} term={props.term} /> 
-                    </div>
+                        </div>
+                        <div>
+                            <label>Inkluder DIPS FRONT</label>
+                            <input type="checkbox" onChange={checkHandler} value={props.isFrontChecked} checked={props.isFrontChecked} />
+                        </div>
                 </div>
             </nav>
             </header>

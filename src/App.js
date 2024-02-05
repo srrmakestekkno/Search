@@ -5,10 +5,10 @@ import MainContent from "./Components/MainContent.js";
 import './custom.css';
 import utils from "./utils.js";
 
-
 const App = () => {
     const defaultFormData = {
         "selectedManager": "",
+        "selectedCompany": "",
         "selectedProduct": "",
         "selectedVersion": "",
         "selectedFromDate": "",
@@ -16,79 +16,145 @@ const App = () => {
         "selectedStatus": "",
         "searchTerm": ""
     };
-
-    const [searchTerm, setSearchTermState] = useState("");
-    const [formData, setFormData] = useState(defaultFormData);
-
-    // Saker
-    const [tickets, setTickets] = useState([]);
-    /*const [originalResult, setOriginalResult] = useState([]);  */
-    const [originalResult, setOriginalResult] = useState({});  
-
-    const [isSearching, setIsSearching] = useState(false);
+    
+    const [isFrontChecked, setIsFrontChecked] = useState(false); // Parameter as header to the API.
+    const [searchTerm, setSearchTermState] = useState(""); // The search string.
+    const [formData, setFormData] = useState(defaultFormData); // For resetting filters to empty values.    
+    const [tickets, setTickets] = useState([]); // Cases shown.
+    const [originalResult, setOriginalResult] = useState({}); // Save it in memory for resetting filters.
+    const [isSearching, setIsSearching] = useState(false); // Progress bar.
 
     // Dropdowns
-    const [managers, setManagers] = useState([]); // Unike forvaltere som finnes i søket.
-    const [products, setProducts] = useState([]); // Unike produkter som finnes i søket.
-    const [versions, setVersions] = useState([]); // Unike versjoner som finnes i søket.
+    const [managers, setManagers] = useState([]); // Unique managers in the result.
+    const [companies, setCompanies] = useState([]); // Unique companies in the result.
+    const [products, setProducts] = useState([]); // Unique products in the result.
+    const [versions, setVersions] = useState([]); // Unique versions in the result.
+    
 
     const addTickets = (profileData) => {
         setOriginalResult(profileData);
-        setTickets(profileData.tickets);
-        setManagers(profileData.companies);
-        setProducts(profileData.products);
-        setVersions(profileData.versions)
-        setIsSearching(false);
+
+        if (profileData.tickets.length > 0) {          
+            setTickets(profileData.tickets);
+            setManagers(profileData.managers);
+            setCompanies(profileData.companies);
+            setProducts(profileData.products);
+            setVersions(profileData.versions)
+            setIsSearching(false);
+        }        
     };
 
+    // Used for every new request.
     const clearTickets = () => {
         setOriginalResult({});
         setTickets([]);
         setManagers([]);
+        setCompanies([]);
         setProducts([]);
         setVersions([])
         setIsSearching(true);
     };
 
-    const handleSelectChange = (name, selectedValue) => {
+    const handleSelectChange = (name, selectedValue) => {          
         setFormData((prevData) => ({
             ...prevData,
             [name]: selectedValue
         }));
     };
 
+    // Reset button.
     const handleReset = (e) => {
         e.preventDefault();
-        setFormData(defaultFormData);;
+        setFormData(defaultFormData);
         if (originalResult.tickets !== undefined) {
             setTickets(originalResult.tickets);
+            setManagers(originalResult.managers);
+            setCompanies(originalResult.companies)
+            setProducts(originalResult.products);
+            setVersions(originalResult.versions);
         }
-    };
-    
+    }; 
 
-    const filterTheResult = (event) => {        
-        event.preventDefault();        
+    // Dropdown onClick event.
+    const filterTheResult = (event) => {  
+        event.preventDefault(); 
+        
         if (originalResult.tickets === undefined) {
             return;
         }
+
         let status = "";
         if (formData.selectedStatus !== "") {
             status = formData.selectedStatus === "active" ? 1 : 2;
         }
 
         let filteredSearch = [];
-
+        let tempManagersMap = new Map();
+        let tempCompaniesMap = new Map();
+        let tempProductsMap = new Map();
+        let tempVersionsMap = new Map();      
+        
         for (const ticket of originalResult.tickets) { 
             if ((formData.selectedManager === "" || formData.selectedManager === ticket.manager) &&
+                (formData.selectedCompany === "" || formData.selectedCompany === ticket.company) &&
                 (formData.selectedProduct === "" || formData.selectedProduct === ticket.product) &&
-                (formData.selectedVersion === "" || formData.selectedVersion === ticket.version) &&
-                //(formData.selectedFromDate === "" || new Date(fromDate).getTime() <= new Date(formatDateYYYYMMDD(ticket.created_At)).getTime()) &&
-                //(formData.selectedToDate === "" || new Date(toDate).getTime() >= new Date(formatDateYYYYMMDD(ticket.created_At)).getTime()) &&
+                (formData.selectedVersion === "" || formData.selectedVersion === ticket.version) &&                
                 (formData.selectedStatus === "" || status === ticket.status)) {
+
                 filteredSearch.push(ticket);
+
+                if (!tempManagersMap.has(ticket.manager_Id)) {
+                    tempManagersMap.set(ticket.manager_Id, ticket.manager);
+                }
+
+                if (!tempCompaniesMap.has(tickets.company_Id)) {
+                    tempCompaniesMap.set(ticket.company_Id, ticket.company);
+                }
+
+                if (!tempProductsMap.has(ticket.id)) {
+                    tempProductsMap.set(ticket.product_Id, ticket.product);
+                }
+
+                if (!tempVersionsMap.has(ticket.version_Id)) {
+                    tempVersionsMap.set(ticket.version_Id, ticket.version);
+                }    
             }
         }
+                
         setTickets(filteredSearch);
+        populateDropdown(tempManagersMap, tempCompaniesMap, tempProductsMap, tempVersionsMap);              
+    };
+
+    const populateDropdown = (tempManagersMap, tempCompaniesMap, tempProductsMap, tempVersionsMap) => {
+        const populateManagers = () => {
+            return new Promise((resolve, reject) => {
+                setManagers(Array.from(tempManagersMap, ([key, value]) => ({ id: key, managerName: value })));
+                resolve();
+            });
+        };
+
+        const populateCompanies = () => {
+            return new Promise((resolve, reject) => {
+                setCompanies(Array.from(tempCompaniesMap, ([key, value]) => ({ id: key, companyName: value })));
+                resolve();
+            });
+        };
+
+        const populateProducts = () => {
+            return new Promise((resolve, reject) => {
+                setProducts(Array.from(tempProductsMap, ([key, value]) => ({ id: key, productName: value })));
+                resolve();
+            });
+        };
+
+        const populateVersion = () => {
+            return new Promise((resolve, reject) => {
+                setVersions(Array.from(tempVersionsMap, ([key, value]) => ({ id: key, name: value })));
+                resolve();
+            });
+        };
+
+        Promise.all([populateManagers(), populateCompanies(), populateProducts(), populateVersion()]); 
     };
 
     const sort = (event) => {
@@ -104,22 +170,25 @@ const App = () => {
             const sortedTickets = [...tickets].sort(sortByDesc).map(x => x);
             setTickets(sortedTickets);
         } else {
-            setTickets(tickets); // Setter tickets med ev. utvalgskriterier.
+            setTickets(tickets);
         }    
     };
-
+    
     
     return (
         <div className='container'>
             <SearcBar
+                checkHandler={setIsFrontChecked}
+                isFrontChecked={isFrontChecked}
                 setSearchTermState={setSearchTermState}
                 setIsSearching={setIsSearching}
                 addTickets={addTickets}
                 term={searchTerm}
                 clear={clearTickets} />
             <SideBar
-                sort={sort}    
+                sort={sort}
                 selectedManager={formData.selectedManager}
+                selectedCompany={formData.selectedCompany}
                 selectedProduct={formData.selectedProduct}
                 selectedVersion={formData.selectedVersion}
                 selectedFromDate={formData.selectedFromDate}
@@ -127,26 +196,17 @@ const App = () => {
                 selectedStatus={formData.selectedStatus}
                 onSelectChange={handleSelectChange}
                 onReset={handleReset}
+                managers={managers}
+                companies={companies}
                 products={products}
-                versions={versions}
-                data={managers}
+                versions={versions}                
                 filterTheResult={filterTheResult}
-            />
-            {                
-                //hasContent === true &&
-
-                //<MainContent
-                //    header={originalResult.header}
-                //    profiles={tickets}
-                //    term={formData.searchTerm}
-                //    />
-
-            }  
+            />  
             <MainContent
                 header={originalResult.header}
                 profiles={tickets}
                 term={searchTerm}
-                isSearching={isSearching}                
+                isSearching={isSearching}
                     />
         </div>
     );

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import '../custom.css';
 
 const Version = (props) => ( 
@@ -11,6 +11,7 @@ const Versions = (props) => {
         <div className='hf'>
             <label className="dropdownLabel">Versjoner</label>
             <select
+                onClick={e => props.versionClick(e)}
                 className="dropdown"
                 value={props.selectedVersion}
                 onChange={(event) => props.onSelectChange("selectedVersion", event.target.value)}>
@@ -25,6 +26,7 @@ const VersionDropdown = (props) => {
     return (
         <div>
             <Versions
+                versionClick={props.versionClick}
                 onSelectChange={props.onSelectChange}
                 selectedVersion={props.selectedVersion}
                 versions={props.versions} />
