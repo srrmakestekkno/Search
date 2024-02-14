@@ -24,11 +24,7 @@ const Status = (props) => {
     )
 };
 
-const SideBar = (props) => {  
-    const handleSubmit = (event) => {  
-        props.filterTheResult(event);        
-    };    
-
+const SideBar = (props) => {    
     return (
         <aside className="sidebar">
             <SortBy sort={props.sort} />

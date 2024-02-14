@@ -3,7 +3,7 @@ import React from "react";
 const SortBy = (props) => {
     return (
         <div className="date2">
-            <label className="dropdownLabel">Sorter søkeresultatet</label>
+            <label className="dropdownLabel">Sorter sÃ¸keresultatet</label>
             <select
                 className="dropdown"
                 onChange={e => props.sort(e)}>

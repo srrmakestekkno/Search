@@ -8,7 +8,7 @@ const SearchForm = (props) => {
                 value={props.term}
                 onChange={event => props.setSearchTermState(event.target.value)}
                 type="text"
-                placeholder="Søk i saker..."
+                placeholder="SÃ¸k i saker..."
                 required />           
             
         </form>

@@ -57,7 +57,6 @@ const HeaderInfo = (props) => {
     );
 };
 
-
 const MainContent = (props) => {
     const isSearching = props.isSearching;
     const profilesLength = props.profiles.length;
@@ -73,7 +72,7 @@ const MainContent = (props) => {
     if (isSearching) {
         return (
             <div className="content">
-                <HeaderInfo message={`Søker i dsak etter ${props.term}`} />
+                <HeaderInfo message={`SÃ¸ker i dsak etter ${props.term}`} />
                 <Spinner />
             </div>
         );

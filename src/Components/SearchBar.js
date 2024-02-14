@@ -21,6 +21,7 @@ const SearcBar = (props) => {
     };
 
     const search = async (searchTerm, event) => {
+        let res = null;
         try {
             event.preventDefault();
             let callId = "" + uuidv4();
@@ -30,12 +31,24 @@ const SearcBar = (props) => {
                 body: JSON.stringify(searchTerm)
             };
 
-            const res = await fetch(`${api}/${endpoint}`, requestOptions);           
+            res = await fetch(`${api}/${endpoint}`, requestOptions);
+            //console.log(`${api}/${endpoint} --- Body=${requestOptions}`);
+            let data = await res.json();
             
-            const data = await res.json();  
             props.setIsSearching(false);
-            props.addTickets(data);            
-        } catch (error) {
+            props.addTickets(data);  
+            
+        } catch (error) {                 
+            props.addTickets({
+                header: `${res.status} Error fetching data: ${error.message}`,
+                query: searchTerm,
+                tickets: [],
+                managers: [],
+                companies: [],
+                products: [],
+                versions: [],
+                numberOfTickets: 0
+            });
             console.error(`Error fetching data: ${error.message}`);
             props.setIsSearching(false);
             
