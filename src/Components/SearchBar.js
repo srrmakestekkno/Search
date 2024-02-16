@@ -2,14 +2,15 @@ import React from "react";
 import SearchForm from "./SearchForm.js";
 import '../custom.css';
 import { v4 as uuidv4 } from 'uuid';
-
+import axios from "axios";
 
 const SearcBar = (props) => {
     const httpMethod = "POST";
     const contentType = "application/json;charset=UTF-8";
     const api = "ticket";
     const endpoint = "search";
-
+    const url = "https://localhost:7088";
+    const url3 = "https://vt-ks-srv01.dev.dips.no/searchapi";
     const handleFormEvent = (event) => {
         
         const searchTerm = props.term;    
@@ -21,7 +22,8 @@ const SearcBar = (props) => {
     };
 
     const search = async (searchTerm, event) => {
-        let res = null;
+        //let res = null;
+        let resp = null;
         try {
             event.preventDefault();
             let callId = "" + uuidv4();
@@ -30,17 +32,25 @@ const SearcBar = (props) => {
                 headers: { "Content-Type": contentType, "callId": callId, "includeFront": props.isFrontChecked },
                 body: JSON.stringify(searchTerm)
             };
-
-            res = await fetch(`${api}/${endpoint}`, requestOptions);
-            //console.log(`${api}/${endpoint} --- Body=${requestOptions}`);
-            let data = await res.json();
+            console.log(`${url3}/${api}/${endpoint}`);
+            //const resp = await fetch(`${url}/${api}/${endpoint}`, requestOptions);
+            resp = await axios.post(`${url3}/${api}/${endpoint}`, JSON.stringify(searchTerm), {
+                headers: {
+                    "Content-Type": contentType,
+                    "callId": callId,
+                    "includeFront": props.isFrontChecked
+                }
+            });
+            console.log(resp);
+            let data = resp.data; //await resp.json();
             
             props.setIsSearching(false);
             props.addTickets(data);  
             
-        } catch (error) {                 
+        } catch (error) {    
+            console.log(resp);
             props.addTickets({
-                header: `${res.status} Error fetching data: ${error.message}`,
+                header: `Error fetching data: ${error.message}`,
                 query: searchTerm,
                 tickets: [],
                 managers: [],

@@ -51,7 +51,7 @@ const TableData = (props) => {
 
 const HeaderInfo = (props) => {
     return (
-        <div>
+        <div className="row">
             <h2>{props.message}</h2>
         </div>
     );
@@ -59,7 +59,7 @@ const HeaderInfo = (props) => {
 
 const MainContent = (props) => {
     const isSearching = props.isSearching;
-    const profilesLength = props.profiles.length;
+    const profilesLength = props.profiles.length;    
     
     if (profilesLength > 0) {
         return (

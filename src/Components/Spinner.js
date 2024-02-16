@@ -3,9 +3,12 @@ import '../custom.css';
 
 const Spinner = () => {
     return (
-        <div className='progress'>
-            <div className="indeterminate"></div>
+        <div className="row">
+            <div className='progress'>
+                <div className="indeterminate"></div>
+            </div>
         </div>
+        
     );
 };
 
