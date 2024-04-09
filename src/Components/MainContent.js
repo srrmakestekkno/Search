@@ -28,7 +28,11 @@ const TableData = (props) => {
                             <td>{++i}</td>
                             <td>{item.id}</td>
                             <td>
-                                <a href={`${URL}${item.id}`} target="_blank" rel="noreferrer">
+                                <a href={`${URL}${item.id}`}
+                                    onClick={e => props.handleClickedLink(item.id)}
+                                    style={{ color: props.clickedLinks[item.id] ? 'red' : 'blue'}}
+                                    target="_blank"
+                                    rel="noreferrer">
                                     <div>
                                         {item.title}
                                     </div>
@@ -65,7 +69,10 @@ const MainContent = (props) => {
         return (
             <div className="content">
                 <HeaderInfo message={`${props.header}`} />
-                <TableData content={props.profiles} />
+                <TableData
+                    clickedLinks={props.clickedLinks}
+                    handleClickedLink={props.handleClickedLink}
+                    content={props.profiles} />
             </div>            
         );
     }

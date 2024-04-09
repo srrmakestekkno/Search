@@ -29,7 +29,19 @@ const App = () => {
     const [companies, setCompanies] = useState([]); // Unique companies in the result.
     const [products, setProducts] = useState([]); // Unique products in the result.
     const [versions, setVersions] = useState([]); // Unique versions in the result.
-    
+
+    // Links clicked
+    const [clickedLinks, setClickedLinks] = useState({});
+
+    const handleClickedLink = (linkId) => {
+        // If the link is not in the clickedLinks dictionary, add it with the click status
+        if (!clickedLinks.hasOwnProperty(linkId)) {
+            setClickedLinks((prevClickedLinks) => ({
+                ...prevClickedLinks,
+                [linkId]: true,
+            }));
+        }
+    };
 
     const addTickets = (profileData) => {
         setOriginalResult(profileData);
@@ -53,6 +65,7 @@ const App = () => {
         setProducts([]);
         setVersions([])
         setIsSearching(true);
+        setClickedLinks({});
     };
 
     const handleSelectChange = (name, selectedValue) => {          
@@ -203,6 +216,8 @@ const App = () => {
                 filterTheResult={filterTheResult}
             />  
             <MainContent
+                clickedLinks={clickedLinks}
+                handleClickedLink={handleClickedLink}
                 header={originalResult.header}
                 profiles={tickets}
                 term={searchTerm}
