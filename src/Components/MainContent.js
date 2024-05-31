@@ -11,13 +11,13 @@ const TableData = (props) => {
                 <thead>
                     <tr>
                         <th>Linje</th>
-                        <th>Emne</th>
-                        <th>Forvalter</th>
-                        <th>Firma</th>
-                        <th>Opprettet</th>
+                        <th>Subject</th>
+                        <th>Caretaker</th>
+                        <th>Company</th>
+                        <th>Created</th>
                         <th>PBI</th>
-                        <th>Eier</th>
-                        <th>Er aktiv</th>
+                        <th>Owner</th>
+                        <th>Is active</th>
                     </tr>
                 </thead>
                 <tbody>
