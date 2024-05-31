@@ -10,7 +10,7 @@ const SearcBar = (props) => {
     const api = "ticket";
     const endpoint = "search";
     const url = "https://localhost:7088";
-    const url3 = "https://vt-ks-srv01.dev.dips.no/searchapi";
+    const url3 = "";
     const handleFormEvent = (event) => {
         
         const searchTerm = props.term;    
@@ -79,7 +79,7 @@ const SearcBar = (props) => {
                             <SearchForm onChange={handleFormEvent} setSearchTermState={props.setSearchTermState} term={props.term} /> 
                         </div>
                         <div>
-                            <label>Inkluder DIPS FRONT</label>
+                            <label>Inkluder</label>
                             <input type="checkbox" onChange={checkHandler} value={props.isFrontChecked} checked={props.isFrontChecked} />
                         </div>
                 </div>

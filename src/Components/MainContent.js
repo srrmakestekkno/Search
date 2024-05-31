@@ -11,9 +11,7 @@ const TableData = (props) => {
                 <thead>
                     <tr>
                         <th>Linje</th>
-                        <th>Dsak</th>
                         <th>Emne</th>
-                        <th>Produkt</th>
                         <th>Forvalter</th>
                         <th>Firma</th>
                         <th>Opprettet</th>
@@ -26,7 +24,6 @@ const TableData = (props) => {
                     {content.map((item, i) => {
                         return <tr key={item.id}>
                             <td>{++i}</td>
-                            <td>{item.id}</td>
                             <td>
                                 <a href={`${URL}${item.id}`}
                                     onClick={e => props.handleClickedLink(item.id)}
@@ -38,7 +35,6 @@ const TableData = (props) => {
                                     </div>
                                 </a>
                             </td>
-                            <td>{item.product}</td>
                             <td>{item.manager}</td>
                             <td>{item.company}</td>
                             <td>{utils.formatDate(item.created_At)}</td>
@@ -79,7 +75,7 @@ const MainContent = (props) => {
     if (isSearching) {
         return (
             <div className="content">
-                <HeaderInfo message={`Søker i dsak etter ${props.term}`} />
+                <HeaderInfo message={`Søker etter ${props.term}`} />
                 <Spinner />
             </div>
         );
